@@ -112,7 +112,7 @@ function createTitleParticles() {
           vy: (Math.random() - 0.5) * 3,
           color: "#ffffff",
           size: Math.random() * 2 + 1,
-          delay: Math.random() * 20 + 30
+          delay: Math.random() * 20 + 120
         });
       }
     }
