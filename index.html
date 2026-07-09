@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHUN PORTFOLIO</title>
+  <!-- レトロゲーム・システム感に100%マッチする無骨な等幅フォント(Share Tech Mono)を読み込み -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="game-body">
+
+  <!-- =========================================================
+    1. ロード画面（コマンドライン・サイバー風システム起動）
+  ========================================================= -->
+  <div id="boot-loader" class="boot-screen">
+    <div class="boot-log-container">
+      <!-- ここにJavaScriptでカタカタカタッとログを出していくよ -->
+      <p class="boot-line">> LOADING SHUN SYSTEM v2026...</p>
+      <p class="boot-line">> SKILLS: HTML5, CSS3, JAVASCRIPT, GITHUB [DETECTED]</p>
+      <p class="boot-line">> LOADING WORKS: MONO-COFFEE... [SUCCESS]</p>
+      <p class="boot-line">> LOADING WORKS: PURE-CARE...   [SUCCESS]</p>
+      <p class="boot-line">> LOADING WORKS: HAIR-SALON...  [SUCCESS]</p>
+      <p class="boot-line boot-ok">> SYSTEM OK.</p>
+    </div>
+  </div>
+
+  <!-- =========================================================
+    2. タイトルコール画面（ドット絵風に弾け飛ぶ主役）
+  ========================================================= -->
+  <div id="title-call-screen" class="title-screen">
+    <!-- あとでCSSやJSでドットモザイク化して弾け飛ばすための極太白文字 -->
+    <h1 class="giant-title">SHUN PORTFOLIO</h1>
+  </div>
+
+  <!-- =========================================================
+    3. 本編・メイン画面（漆黒のステータス ＆ メニュー）
+  ========================================================= -->
+  <div id="main-game-screen" class="main-screen">
+    <div class="hud-container">
+      
+      <!-- 左側：メニュー選択（あなたが操作する場所） -->
+      <div class="hud-menu-box">
+        <nav class="game-menu">
+          <ul>
+            <li class="menu-item active">
+              <span class="cursor">▶</span> <button id="start-game-btn">START GAME</button>
+            </li>
+            <li class="menu-item">
+              <span class="cursor" style="visibility: hidden;">▶</span> <button disabled>SELECT STAGE</button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- 右側：ABOUT（プレイヤーのステータス画面） -->
+      <div class="hud-status-box">
+        <div class="status-window">
+          <p class="status-header">[ PLAYER STATUS ]</p>
+          <p class="status-line">NAME : SHUN</p>
+          <p class="status-line">LV   : 2026</p>
+          
+          <p class="status-header" style="margin-top: 20px;">[ SKILL GAUGE ]</p>
+          <p class="status-line">HTML : ■■■■■■■■□□</p>
+          <p class="status-line">CSS  : ■■■■■■■■■□</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
