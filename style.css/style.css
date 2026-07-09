@@ -1,13 +1,326 @@
+/* ==========================================================================
+   RESET & BASE STYLES
+   ========================================================================== */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  user-select: none;
 }
 
 body, html {
   width: 100%;
   height: 100%;
-  background-color: #000; /* 背景は真っ黒 */
+  background-color: #000;
   color: #fff;
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'Share Tech Mono', monospace, sans-serif;
+  overflow: hidden;
+}
+
+button {
+  background: none;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  outline: none;
+}
+
+/* ==========================================================================
+   1. BOOT LOADER (システム起動画面)
+   ========================================================================== */
+.boot-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 40px;
+  z-index: 100;
+}
+
+.boot-line {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #00ff66; /* サイバーグリーン */
+  margin-bottom: 8px;
+}
+
+.boot-ok {
+  color: #33ccff;
+  font-weight: bold;
+}
+
+.cursor-blink {
+  display: inline-block;
+  width: 10px;
+  height: 18px;
+  background-color: #00ff66;
+  margin-left: 5px;
+  animation: blink 0.8s infinite steps(2);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ==========================================================================
+   2. TITLE CALL (タイトル画面)
+   ========================================================================== */
+.title-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 90;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.title-screen.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#title-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ==========================================================================
+   3. MAIN GAME MENU (ステータス ＆ メニュー画面)
+   ========================================================================== */
+.main-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 80;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  padding: 20px;
+}
+
+.main-screen.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hud-container {
+  width: 100%;
+  max-width: 1000px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 2px solid #333;
+  background-color: #050505;
+}
+
+@media (max-width: 768px) {
+  .hud-container { grid-template-columns: 1fr; }
+}
+
+.hud-menu-box {
+  border-right: 2px solid #333;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .hud-menu-box { border-right: none; border-bottom: 2px solid #333; padding: 30px; }
+}
+
+.menu-item {
+  font-size: 1.8rem;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 2px;
+}
+
+.menu-item .cursor {
+  color: #00ff66;
+  margin-right: 15px;
+  animation: cursor-wiggle 0.6s infinite alternate steps(2);
+}
+
+@keyframes cursor-wiggle {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(5px); }
+}
+
+.menu-item button:hover {
+  color: #00ff66;
+  text-shadow: 0 0 10px rgba(0, 255, 102, 0.5);
+}
+
+.menu-item.disabled { opacity: 0.3; }
+
+/* 【採用】ピキーン決定エフェクト */
+.menu-item.pi-keen .cursor {
+  animation: pi-keen-glow 0.3s ease-out forwards !important;
+}
+
+@keyframes pi-keen-glow {
+  0% { transform: scale(1); color: #00ff66; }
+  50% { transform: scale(2.5); color: #fff; filter: drop-shadow(0 0 10px #00ff66); }
+  100% { transform: scale(1); color: #00ff66; }
+}
+
+.hud-status-box {
+  padding: 50px;
+  background-color: #080808;
+}
+
+.status-header {
+  color: #888;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #222;
+  padding-bottom: 4px;
+}
+
+.status-line { margin-bottom: 8px; }
+
+/* ==========================================================================
+   4. SHUTTER DOT WIPE (シャッター・ドットワイプ)
+   ========================================================================== */
+.shutter-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 95;
+  pointer-events: none;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+}
+
+.shutter-panel {
+  background-color: #000;
+  opacity: 0;
+  transition: opacity 0.15s ease-in-out;
+}
+
+.shutter-panel.filled { opacity: 1; }
+
+/* ==========================================================================
+   5. STAGE SELECT SCREEN (ステージセレクト)
+   ========================================================================== */
+.select-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 70;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.select-screen.active { opacity: 1; pointer-events: auto; }
+
+#falling-shapes-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.select-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 650px;
+  border: 1px solid #222;
+  background-color: rgba(0, 0, 0, 0.85);
+  padding: 40px;
+}
+
+.select-title {
+  font-size: 1.4rem;
+  text-align: center;
+  margin-bottom: 40px;
+  letter-spacing: 6px;
+  color: #888;
+}
+
+.stage-list { display: flex; flex-direction: column; gap: 20px; list-style: none;}
+
+.stage-item {
+  border: 1px solid #333;
+  padding: 18px 24px;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s;
+}
+
+.stage-item .stage-cursor {
+  color: #00ff66;
+  margin-right: 15px;
+  opacity: 0;
+  transform: translateX(-5px);
+  transition: all 0.2s;
+}
+
+/* 【採用】ステージ選択時の白黒反転 */
+.stage-item:hover {
+  border-color: #00ff66;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.stage-item:hover .stage-cursor { opacity: 1; transform: translateX(0); color: #000; }
+
+.stage-item.locked-on {
+  animation: item-lock-flash 0.4s ease forwards;
+}
+
+@keyframes item-lock-flash {
+  0%, 50%, 100% { border-color: #00ff66; background-color: #000; color: #fff; }
+  25%, 75% { border-color: #fff; background-color: #00ff66; color: #000; }
+}
+
+/* 【採用】コンテナ全体のズームイン */
+.select-container.zoom-out {
+  animation: container-zoom 1.5s cubic-bezier(0.85, 0, 0.15, 1) forwards;
+}
+
+@keyframes container-zoom {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(15); opacity: 0; filter: blur(10px); }
 }
