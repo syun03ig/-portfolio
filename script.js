@@ -13,6 +13,7 @@ const logData = [
 const logContainer = document.getElementById("log-container");
 
 function startBooting() {
+  if (!logContainer) return;
   let currentLine = 0;
 
   function printLine() {
@@ -59,13 +60,18 @@ window.onload = function() {
 // ==========================================================================
 const titleScreen = document.getElementById("title-call-screen");
 const titleCanvas = document.getElementById("title-canvas");
-const titleCtx = titleCanvas.getContext("2d");
 
 let particles = [];
 let titleAnimationId;
 
 function transitionToTitle() {
-  document.getElementById("boot-loader").style.display = "none";
+  const bootLoader = document.getElementById("boot-loader");
+  if (bootLoader) bootLoader.style.display = "none";
+  if (!titleScreen || !titleCanvas) {
+    transitionToMainScreen();
+    return;
+  }
+  
   titleScreen.classList.add("active");
 
   titleCanvas.width = window.innerWidth;
@@ -76,6 +82,7 @@ function transitionToTitle() {
 }
 
 function createTitleParticles() {
+  const titleCtx = titleCanvas.getContext("2d");
   const text = "SHUN PORTFOLIO";
   titleCtx.fillStyle = "#ffffff";
   titleCtx.font = "bold " + Math.min(window.innerWidth * 0.08, 70) + "px 'Share Tech Mono'";
@@ -115,6 +122,7 @@ function createTitleParticles() {
 
 let frameCount = 0;
 function animateTitleExplosion() {
+  const titleCtx = titleCanvas.getContext("2d");
   titleCtx.clearRect(0, 0, titleCanvas.width, titleCanvas.height);
   frameCount++;
 
@@ -159,21 +167,24 @@ const startGameBtn = document.getElementById("start-game-btn");
 const startMenuItem = document.getElementById("start-menu-item");
 
 function transitionToMainScreen() {
-  titleScreen.classList.remove("active");
-  mainScreen.classList.add("active");
+  if (titleScreen) titleScreen.classList.remove("active");
+  if (mainScreen) mainScreen.classList.add("active");
 }
 
-startGameBtn.addEventListener("click", () => {
-  startMenuItem.classList.add("pi-keen");
+if (startGameBtn) {
+  startGameBtn.addEventListener("click", () => {
+    if (startMenuItem) startMenuItem.classList.add("pi-keen");
 
-  setTimeout(() => {
-    triggerShutterWipe(() => {
-      mainScreen.classList.remove("active");
-      document.getElementById("stage-select-screen").classList.add("active");
-      startFallingShapes();
-    });
-  }, 500);
-});
+    setTimeout(() => {
+      triggerShutterWipe(() => {
+        if (mainScreen) mainScreen.classList.remove("active");
+        const stageSelect = document.getElementById("stage-select-screen");
+        if (stageSelect) stageSelect.classList.add("active");
+        startFallingShapes();
+      });
+    }, 500);
+  });
+}
 
 // ==========================================================================
 // 4. SHUTTER WIPE (ドットシャッター切り替え)
@@ -184,6 +195,7 @@ const cols = 10;
 let panels = [];
 
 function initShutterGrid() {
+  if (!shutter) return;
   shutter.innerHTML = "";
   panels = [];
   for (let i = 0; i < rows * cols; i++) {
@@ -197,12 +209,14 @@ function initShutterGrid() {
 function triggerShutterWipe(middleCallback) {
   const delayMatrix = [];
   for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
+    for (let c = 0; c < cols; c++) { // ←ここを完全に修正しました！
       const index = r * cols + c;
-      delayMatrix.push({
-        el: panels[index],
-        delay: (r + c) * 35 
-      });
+      if (panels[index]) {
+        delayMatrix.push({
+          el: panels[index],
+          delay: (r + c) * 35 
+        });
+      }
     }
   }
 
@@ -228,7 +242,6 @@ function triggerShutterWipe(middleCallback) {
 // 5. STAGE SELECT BACKGROUND EFFECTS (こだわりの落ち物物理図形システム)
 // ==========================================================================
 const shapesCanvas = document.getElementById("falling-shapes-canvas");
-const sCtx = shapesCanvas.getContext("2d");
 let shapeList = [];
 let shapesAnimationId;
 let isShapesRunning = false;
@@ -236,14 +249,14 @@ let isShapesRunning = false;
 class FallingShape {
   constructor(type) {
     this.type = type; 
-    this.x = Math.random() * shapesCanvas.width;
+    this.x = Math.random() * (shapesCanvas ? shapesCanvas.width : 500);
     this.y = -20;
     this.size = Math.random() * 10 + 10;
     
     if (this.type === 'square') {
       this.speed = Math.random() * 0.5 + 0.3; 
       this.opacity = 0.5;
-      this.fadeStartY = shapesCanvas.height * (Math.random() * 0.4 + 0.3); 
+      this.fadeStartY = (shapesCanvas ? shapesCanvas.height : 500) * (Math.random() * 0.4 + 0.3); 
     } else if (this.type === 'cross') {
       this.speed = Math.random() * 0.6 + 0.4; 
       this.angle = Math.random() * Math.PI * 2;
@@ -261,6 +274,7 @@ class FallingShape {
   }
 
   update() {
+    const canvasHeight = shapesCanvas ? shapesCanvas.height : 500;
     if (this.type === 'square') {
       this.y += this.speed;
       if (this.y > this.fadeStartY) {
@@ -276,8 +290,8 @@ class FallingShape {
         this.vy += 0.2; 
         this.y += this.vy;
 
-        if (this.y >= shapesCanvas.height - this.size) {
-          this.y = shapesCanvas.height - this.size;
+        if (this.y >= canvasHeight - this.size) {
+          this.y = canvasHeight - this.size;
           this.bounceCount++;
           if (this.bounceCount >= this.maxBounces) {
             this.opacity = 0; 
@@ -287,8 +301,8 @@ class FallingShape {
         }
       } else {
         this.y += this.speed;
-        if (this.y >= shapesCanvas.height - this.size) {
-          this.y = shapesCanvas.height - this.size;
+        if (this.y >= canvasHeight - this.size) {
+          this.y = canvasHeight - this.size;
           this.isBouncing = true;
           this.vy = -this.speed * 0.6; 
           this.bounceCount++;
@@ -298,6 +312,8 @@ class FallingShape {
   }
 
   draw() {
+    if (!shapesCanvas) return;
+    const sCtx = shapesCanvas.getContext("2d");
     sCtx.save();
     sCtx.globalAlpha = Math.max(0, this.opacity);
     sCtx.strokeStyle = "#444444";
@@ -331,16 +347,19 @@ class FallingShape {
   }
 
   isDead() {
-    return this.y > shapesCanvas.height + 30 || this.opacity <= 0;
+    const canvasHeight = shapesCanvas ? shapesCanvas.height : 500;
+    return this.y > canvasHeight + 30 || this.opacity <= 0;
   }
 }
 
 function initShapesCanvasSize() {
+  if (!shapesCanvas) return;
   shapesCanvas.width = window.innerWidth;
   shapesCanvas.height = window.innerHeight;
 }
 
 function startFallingShapes() {
+  if (!shapesCanvas) return;
   initShapesCanvasSize();
   window.addEventListener('resize', initShapesCanvasSize);
   shapeList = [];
@@ -349,8 +368,8 @@ function startFallingShapes() {
 }
 
 function animateFallingShapes() {
-  if (!isShapesRunning) return;
-
+  if (!isShapesRunning || !shapesCanvas) return;
+  const sCtx = shapesCanvas.getContext("2d");
   sCtx.clearRect(0, 0, shapesCanvas.width, shapesCanvas.height);
 
   if (Math.random() < 0.15) {
@@ -418,28 +437,34 @@ stageItems.forEach(item => {
     item.classList.add("locked-on");
     pauseFallingShapes();
 
-    setTimeout(() => {
-      selectCard.classList.add("zoom-out");
-    }, 600);
+    if (selectCard) {
+      setTimeout(() => {
+        selectCard.classList.add("zoom-out");
+      }, 600);
+    }
 
     setTimeout(() => {
-      detailStageNum.textContent = data.num;
-      detailTitle.textContent = data.title;
-      detailDesc.textContent = data.desc;
-      mockTitle.textContent = data.title;
-      mockConcept.textContent = data.concept;
+      if (detailStageNum) detailStageNum.textContent = data.num;
+      if (detailTitle) detailTitle.textContent = data.title;
+      if (detailDesc) detailDesc.textContent = data.desc;
+      if (mockTitle) mockTitle.textContent = data.title;
+      if (mockConcept) mockConcept.textContent = data.concept;
 
-      document.getElementById("stage-select-screen").classList.remove("active");
-      detailScreen.classList.add("active");
+      const stageSelect = document.getElementById("stage-select-screen");
+      if (stageSelect) stageSelect.classList.remove("active");
+      if (detailScreen) detailScreen.classList.add("active");
     }, 1800);
   });
 });
 
-backBtn.addEventListener("click", () => {
-  detailScreen.classList.remove("active");
-  selectCard.classList.remove("zoom-out");
-  stageItems.forEach(item => item.classList.remove("locked-on"));
-  
-  document.getElementById("stage-select-screen").classList.add("active");
-  startFallingShapes(); 
-});
+if (backBtn) {
+  backBtn.addEventListener("click", () => {
+    if (detailScreen) detailScreen.classList.remove("active");
+    if (selectCard) selectCard.classList.remove("zoom-out");
+    stageItems.forEach(item => item.classList.remove("locked-on"));
+    
+    const stageSelect = document.getElementById("stage-select-screen");
+    if (stageSelect) stageSelect.classList.add("active");
+    startFallingShapes(); 
+  });
+}
