@@ -9,7 +9,82 @@
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="game-body">
 
-  </body>
+  <div id="boot-loader" class="boot-screen">
+    <div class="boot-log-container" id="log-container">
+      <p class="boot-line">> LOADING SHUN SYSTEM v2026...</p>
+      <p class="boot-line">> SKILLS: HTML5, CSS3, JAVASCRIPT, GITHUB [DETECTED]</p>
+      <p class="boot-line">> LOADING WORKS: MONO-COFFEE... [SUCCESS]</p>
+      <p class="boot-line">> LOADING WORKS: PURE-CARE...   [SUCCESS]</p>
+      <p class="boot-line">> LOADING WORKS: HAIR-SALON...  [SUCCESS]</p>
+      <p class="boot-line boot-ok">> SYSTEM OK.</p>
+      <span class="cursor-blink"></span>
+    </div>
+  </div>
+
+  <div id="title-call-screen" class="title-screen">
+    <canvas id="title-canvas"></canvas>
+  </div>
+
+  <div id="main-game-screen" class="main-screen">
+    <div class="hud-container">
+      
+      <div class="hud-menu-box">
+        <nav class="game-menu">
+          <ul>
+            <li class="menu-item" id="start-menu-item">
+              <span class="cursor">▶</span>
+              <button id="start-game-btn">START GAME</button>
+            </li>
+            <li class="menu-item disabled">
+              <span class="cursor" style="visibility: hidden;">▶</span>
+              <button disabled>SELECT STAGE</button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="hud-status-box">
+        <div class="status-window">
+          <p class="status-header">[ PLAYER STATUS ]</p>
+          <p class="status-line">NAME : SHUN</p>
+          <p class="status-line">LV   : 2026</p>
+          
+          <p class="status-header" style="margin-top: 30px;">[ SKILL GAUGE ]</p>
+          <p class="status-line">HTML : ■■■■■■■■□□ [80%]</p>
+          <p class="status-line">CSS  : ■■■■■■■■■□ [90%]</p>
+          <p class="status-line">JS   : ■■■■■■■□□□ [70%]</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="shutter" class="shutter-overlay"></div>
+
+  <div id="stage-select-screen" class="select-screen">
+    <canvas id="falling-shapes-canvas"></canvas>
+
+    <div class="select-container" id="select-card">
+      <h2 class="select-title">[ SELECT STAGE ]</h2>
+      <ul class="stage-list">
+        <li class="stage-item" data-stage="1">
+          <span class="stage-cursor">▶</span>
+          <span>STAGE 01 : MONO COFFEE</span>
+        </li>
+        <li class="stage-item" data-stage="2">
+          <span class="stage-cursor">▶</span>
+          <span>STAGE 02 : PURE CARE</span>
+        </li>
+        <li class="stage-item" data-stage="3">
+          <span class="stage-cursor">▶</span>
+          <span>STAGE 03 : HAIR SALON</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
 </html>
