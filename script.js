@@ -151,7 +151,7 @@ function animateTitleExplosion() {
     }
   }
 
-  if (activeCount > 50 && frameCount < 220) {
+  if (activeCount > 50 && frameCount < 290) {
     titleAnimationId = requestAnimationFrame(animateTitleExplosion);
   } else {
     cancelAnimationFrame(titleAnimationId);
