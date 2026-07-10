@@ -401,11 +401,11 @@ function pauseFallingShapes() {
 const stageItems = document.querySelectorAll(".stage-item");
 const selectCard = document.getElementById("select-card");
 
-// 【URL設定エリア】Shunさんの各作品ページのURLをここに代入してください！
+// 【本番URL設定】Shunさんの実際の各作品ページURLを完璧にセットしました！
 const worksUrls = {
-  "1": "https://syun03ig.github.io/-portfolio/", // （仮）MONO COFFEE のリンクURL
-  "2": "https://syun03ig.github.io/-portfolio/", // （仮）PURE CARE のリンクURL
-  "3": "https://syun03ig.github.io/-portfolio/"  // （仮）HAIR SALON のリンクURL
+  "1": "https://syun03ig.github.io/mono-coffe/", 
+  "2": "https://syun03ig.github.io/pure-care/",   
+  "3": "https://syun03ig.github.io/hair-salon/"   
 };
 
 stageItems.forEach(item => {
@@ -426,7 +426,7 @@ stageItems.forEach(item => {
       }, 600);
     }
 
-    // 4. ズームインが完全に完了した瞬間（1.8秒後）、別タブでWebサイトへ出撃！
+    // 4. ズームインが完全に完了した瞬間（1.8秒後）、別タブで実際のWebサイトへ出撃！
     setTimeout(() => {
       if (targetUrl) {
         window.open(targetUrl, "_blank");
