@@ -253,20 +253,19 @@ class FallingShape {
     this.y = -20;
     this.size = Math.random() * 10 + 10;
     
-    // 【修正】図形それぞれの透明度をガッツリ引き上げて、しっかり見えるようにしました
     if (this.type === 'square') {
       this.speed = Math.random() * 0.5 + 0.3; 
-      this.opacity = 0.8; // 0.5 -> 0.8 に強化！
+      this.opacity = 0.8; 
       this.fadeStartY = (shapesCanvas ? shapesCanvas.height : 500) * (Math.random() * 0.4 + 0.3); 
     } else if (this.type === 'cross') {
       this.speed = Math.random() * 0.6 + 0.4; 
       this.angle = Math.random() * Math.PI * 2;
       this.rotSpeed = (Math.random() - 0.5) * 0.03; 
-      this.opacity = 0.7; // 0.4 -> 0.7 に強化！
+      this.opacity = 0.7; 
     } else if (this.type === 'dot') {
       this.speed = Math.random() * 1.5 + 1.5; 
       this.size = Math.random() * 3 + 4;
-      this.opacity = 0.9; // 0.6 -> 0.9 に強化！
+      this.opacity = 0.9; 
       this.vy = this.speed;
       this.bounceCount = 0;
       this.maxBounces = 2; 
@@ -317,8 +316,6 @@ class FallingShape {
     const sCtx = shapesCanvas.getContext("2d");
     sCtx.save();
     sCtx.globalAlpha = Math.max(0, this.opacity);
-    
-    // 【修正】線の色を明るい白寄りのグレー（#aaaaaa）にしてクッキリ際立たせます
     sCtx.strokeStyle = "#aaaaaa";
     sCtx.fillStyle = "#aaaaaa";
     sCtx.lineWidth = 1.5;
@@ -399,75 +396,49 @@ function pauseFallingShapes() {
 }
 
 // ==========================================================================
-// 6. STAGE TRANSITION (ステージ決定 ＆ ボス戦風ズームイン)
+// 6. STAGE TRANSITION (ステージ決定 ＆ 爆速Webサイトジャンプシステム)
 // ==========================================================================
 const stageItems = document.querySelectorAll(".stage-item");
 const selectCard = document.getElementById("select-card");
-const detailScreen = document.getElementById("work-detail-screen");
-const detailStageNum = document.getElementById("detail-stage-num");
-const detailTitle = document.getElementById("detail-title");
-const detailDesc = document.getElementById("detail-desc");
-const mockTitle = document.getElementById("mock-title");
-const mockConcept = document.getElementById("mock-concept");
-const backBtn = document.getElementById("back-to-select-btn");
 
-const worksData = {
-  "1": {
-    num: "STAGE 01",
-    title: "MONO COFFEE",
-    desc: "極限まで引き算された、無駄のない静寂なコーヒーショップのブランドサイト。余白とタイポグラフィ、コーヒーの湯気のアニメーションだけに焦点を当て、洗練された空間をWeb上にそのまま移植しました。",
-    concept: "MINIMAL & QUIET"
-  },
-  "2": {
-    num: "STAGE 02",
-    title: "PURE CARE",
-    desc: "クリーンでオーガニックなスキンケア商品のオンラインショップ。清潔感のあるアースカラー、なめらかに吸い付くようなホバーインタラクション、視覚的な透明感をコードの最適化と美しいCSSレイアウトで実現しました。",
-    concept: "CLEAN & NATURAL"
-  },
-  "3": {
-    num: "STAGE 03",
-    title: "HAIR SALON",
-    desc: "ストリートカルチャーの熱量をそのまま落とし込んだ、実機ライクなスマホ操作をベースにした最高傑作。全画面写真、トガった二重罫線、実機を忠実に模倣したメニューモーダルなど、私の技術をフル投入したボスステージです。",
-    concept: "STREET CULTURE"
-  }
+// 【URL設定エリア】Shunさんの各作品ページのURLをここに代入してください！
+const worksUrls = {
+  "1": "https://syun03ig.github.io/-portfolio/", // （仮）MONO COFFEE のリンクURL
+  "2": "https://syun03ig.github.io/-portfolio/", // （仮）PURE CARE のリンクURL
+  "3": "https://syun03ig.github.io/-portfolio/"  // （仮）HAIR SALON のリンクURL
 };
 
 stageItems.forEach(item => {
   item.addEventListener("click", () => {
     const stageId = item.getAttribute("data-stage");
-    const data = worksData[stageId];
+    const targetUrl = worksUrls[stageId];
 
+    // 1. ロックオン点滅演出
     item.classList.add("locked-on");
+    
+    // 2. 背景図形の完全静止
     pauseFallingShapes();
 
+    // 3. 親カード全体の巨大化（ズームインロード）
     if (selectCard) {
       setTimeout(() => {
         selectCard.classList.add("zoom-out");
       }, 600);
     }
 
+    // 4. ズームインが完全に完了した瞬間（1.8秒後）、別タブでWebサイトへ出撃！
     setTimeout(() => {
-      if (detailStageNum) detailStageNum.textContent = data.num;
-      if (detailTitle) detailTitle.textContent = data.title;
-      if (detailDesc) detailDesc.textContent = data.desc;
-      if (mockTitle) mockTitle.textContent = data.title;
-      if (mockConcept) mockConcept.textContent = data.concept;
+      if (targetUrl) {
+        window.open(targetUrl, "_blank");
+      }
+      
+      // ユーザーがポートフォリオタブに戻ってきたときのために、画面の状態を元通りに修復しておく
+      setTimeout(() => {
+        if (selectCard) selectCard.classList.remove("zoom-out");
+        item.classList.remove("locked-on");
+        startFallingShapes(); 
+      }, 500);
 
-      const stageSelect = document.getElementById("stage-select-screen");
-      if (stageSelect) stageSelect.classList.remove("active");
-      if (detailScreen) detailScreen.classList.add("active");
     }, 1800);
   });
 });
-
-if (backBtn) {
-  backBtn.addEventListener("click", () => {
-    if (detailScreen) detailScreen.classList.remove("active");
-    if (selectCard) selectCard.classList.remove("zoom-out");
-    stageItems.forEach(item => item.classList.remove("locked-on"));
-    
-    const stageSelect = document.getElementById("stage-select-screen");
-    if (stageSelect) stageSelect.classList.add("active");
-    startFallingShapes(); 
-  });
-}
