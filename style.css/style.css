@@ -179,7 +179,7 @@ button {
 
 .menu-item.disabled { opacity: 0.3; }
 
-/* 【採用】ピキーン決定エフェクト */
+/* ピキーン決定エフェクト */
 .menu-item.pi-keen .cursor {
   animation: pi-keen-glow 0.3s ease-out forwards !important;
 }
@@ -193,6 +193,11 @@ button {
 .hud-status-box {
   padding: 50px;
   background-color: #080808;
+}
+
+.status-window {
+  font-size: 1.1rem;
+  line-height: 1.6;
 }
 
 .status-header {
@@ -287,6 +292,8 @@ button {
   display: flex;
   align-items: center;
   transition: all 0.2s;
+  background-color: #000;
+  color: #fff;
 }
 
 .stage-item .stage-cursor {
@@ -297,7 +304,7 @@ button {
   transition: all 0.2s;
 }
 
-/* 【採用】ステージ選択時の白黒反転 */
+/* ステージ選択時の白黒反転 */
 .stage-item:hover {
   border-color: #00ff66;
   background-color: #ffffff;
@@ -315,7 +322,7 @@ button {
   25%, 75% { border-color: #fff; background-color: #00ff66; color: #000; }
 }
 
-/* 【採用】コンテナ全体のズームイン */
+/* コンテナ全体のズームイン */
 .select-container.zoom-out {
   animation: container-zoom 1.5s cubic-bezier(0.85, 0, 0.15, 1) forwards;
 }
@@ -324,41 +331,43 @@ button {
   0% { transform: scale(1); opacity: 1; }
   100% { transform: scale(15); opacity: 0; filter: blur(10px); }
 }
-/* --- BRIEFING SCREEN (案2 詳細画面) --- */
+
+/* ==========================================================================
+   6. BRIEFING SCREEN (案2 詳細画面)
+   ========================================================================== */
 .briefing-screen {
-  position: absolute;
+  position: fixed; /* absolute から fixed にして最前面をキープ */
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.9); /* 高級感のある黒透過背景 */
+  background-color: rgba(0, 0, 0, 0.92); /* 高級感のある黒透過背景 */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 60; /* 図形Canvas(z:1)より上、シャッター(z:95)より下 */
+  z-index: 92; /* カンバスより上でシャッターより少し下 */
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
   padding: 20px;
-  transform: scale(0.9); /* 最初は少し縮小 */
+  transform: scale(0.95);
 }
 
-/* 詳細が開いたときのクラス（ふわっと） */
+/* 詳細が開いたときのクラス（ふわっと出現） */
 .briefing-screen.active {
   opacity: 1;
   pointer-events: auto;
-  transform: scale(1); /* 元の大きさに戻る */
+  transform: scale(1);
 }
 
 .briefing-container {
   width: 100%;
-  max-width: 800px;
-  border: 1px solid #333; /* 無骨な細線枠 */
+  max-width: 700px;
+  border: 1px solid #00ff66; /* トガらせるためにサイバーグリーン枠に */
   background-color: #050505;
   padding: 40px;
-  backdrop-filter: blur(2px);
+  box-shadow: 0 0 30px rgba(0, 255, 102, 0.15);
   font-family: 'Share Tech Mono', monospace, sans-serif;
-  position: relative;
 }
 
 .briefing-content {
@@ -395,11 +404,12 @@ button {
   font-size: 2.2rem;
   margin-bottom: 20px;
   letter-spacing: 2px;
+  color: #fff;
 }
 
 /* データ欄 */
 .briefing-data-box, .briefing-desc-box {
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   border-top: 1px solid #222;
   padding-top: 20px;
 }
@@ -414,19 +424,20 @@ button {
 .data-line {
   font-size: 1.1rem;
   letter-spacing: 1px;
+  color: #fff;
 }
 
 /* 日本語テキストエリア */
 .briefing-desc {
-  color: #bbb;
+  color: #ccc;
   font-size: 1rem;
   line-height: 1.8;
   font-family: sans-serif; /* 日本語を読みやすくするためにここだけゴシック体 */
 }
 
-/* --- 出撃ボタンエリア --- */
+/* 出撃ボタンエリア */
 .launch-btn-box {
-  margin-top: 30px;
+  margin-top: 20px;
   text-align: center;
 }
 
@@ -435,20 +446,19 @@ button {
   border: 1px solid #00ff66;
   background-color: #000;
   color: #00ff66;
-  padding: 20px 40px;
-  font-size: 1.4rem;
+  padding: 18px 36px;
+  font-size: 1.3rem;
   letter-spacing: 4px;
-  transition: all 0.2s ease, text-shadow 0.2s ease;
+  transition: all 0.2s ease;
   cursor: pointer;
 }
 
 #mission-launch-btn:hover {
   background-color: #00ff66;
   color: #000;
-  box-shadow: 0 0 20px rgba(0, 255, 102, 0.5);
+  box-shadow: 0 0 20px rgba(0, 255, 102, 0.4);
 }
 
 .btn-cursor {
-  animation: cursor-wiggle 0.6s infinite alternate steps(2);
   margin-left: 10px;
 }
