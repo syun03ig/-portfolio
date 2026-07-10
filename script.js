@@ -316,8 +316,8 @@ class FallingShape {
     const sCtx = shapesCanvas.getContext("2d");
     sCtx.save();
     sCtx.globalAlpha = Math.max(0, this.opacity);
-    sCtx.strokeStyle = "#444444";
-    sCtx.fillStyle = "#444444";
+    sCtx.strokeStyle = "#888888";
+    sCtx.fillStyle = "#888888";
     sCtx.lineWidth = 1.5;
 
     if (this.type === 'square') {
