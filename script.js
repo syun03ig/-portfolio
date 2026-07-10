@@ -209,7 +209,7 @@ function initShutterGrid() {
 function triggerShutterWipe(middleCallback) {
   const delayMatrix = [];
   for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) { // ←ここを完全に修正しました！
+    for (let c = 0; c < cols; c++) {
       const index = r * cols + c;
       if (panels[index]) {
         delayMatrix.push({
@@ -253,19 +253,20 @@ class FallingShape {
     this.y = -20;
     this.size = Math.random() * 10 + 10;
     
+    // 【修正】図形それぞれの透明度をガッツリ引き上げて、しっかり見えるようにしました
     if (this.type === 'square') {
       this.speed = Math.random() * 0.5 + 0.3; 
-      this.opacity = 0.5;
+      this.opacity = 0.8; // 0.5 -> 0.8 に強化！
       this.fadeStartY = (shapesCanvas ? shapesCanvas.height : 500) * (Math.random() * 0.4 + 0.3); 
     } else if (this.type === 'cross') {
       this.speed = Math.random() * 0.6 + 0.4; 
       this.angle = Math.random() * Math.PI * 2;
       this.rotSpeed = (Math.random() - 0.5) * 0.03; 
-      this.opacity = 0.4;
+      this.opacity = 0.7; // 0.4 -> 0.7 に強化！
     } else if (this.type === 'dot') {
       this.speed = Math.random() * 1.5 + 1.5; 
       this.size = Math.random() * 3 + 4;
-      this.opacity = 0.6;
+      this.opacity = 0.9; // 0.6 -> 0.9 に強化！
       this.vy = this.speed;
       this.bounceCount = 0;
       this.maxBounces = 2; 
@@ -316,8 +317,10 @@ class FallingShape {
     const sCtx = shapesCanvas.getContext("2d");
     sCtx.save();
     sCtx.globalAlpha = Math.max(0, this.opacity);
-    sCtx.strokeStyle = "#888888";
-    sCtx.fillStyle = "#888888";
+    
+    // 【修正】線の色を明るい白寄りのグレー（#aaaaaa）にしてクッキリ際立たせます
+    sCtx.strokeStyle = "#aaaaaa";
+    sCtx.fillStyle = "#aaaaaa";
     sCtx.lineWidth = 1.5;
 
     if (this.type === 'square') {
