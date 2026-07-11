@@ -85,7 +85,7 @@ function createTitleParticles() {
   const titleCtx = titleCanvas.getContext("2d");
   const text = "SHUN PORTFOLIO";
   titleCtx.fillStyle = "#ffffff";
-  titleCtx.font = "bold " + Math.min(window.innerWidth * 0.08, 70) + "px 'Share Tech Mono'";
+  titleCtx.font = "900 " + Math.min(window.innerWidth * 0.08, 60) + "px 'Orbitron'";
   titleCtx.textAlign = "center";
   titleCtx.textBaseline = "middle";
   
