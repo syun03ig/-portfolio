@@ -7,7 +7,7 @@
   padding: 0;
   user-select: none;
 }
-
+.menu-item
 body, html {
   width: 100%;
   height: 100%;
@@ -486,9 +486,17 @@ button {
     padding: 30px 20px;
   }
   
-  .menu-item {
+ .menu-item {
     font-size: 1.4rem;
+    position: relative; /* 基準点を設定 */
     justify-content: center;
+  }
+  
+  /* スマホの時だけ、矢印（▶）を絶対配置にしてテキストの配置に干渉させない！ */
+  .menu-item .cursor {
+    position: absolute;
+    left: calc(50% - 7rem); /* テキストの長さに合わせて自動で左側に添える計算式 */
+    margin-right: 0;        /* ズレの原因だった右マージンをリセット */
   }
   
   .hud-status-box {
