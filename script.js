@@ -51,8 +51,18 @@ function startBooting() {
 }
 
 window.onload = function() {
-  startBooting();
-  initShutterGrid();
+  // 'Orbitron' と 'Share Tech Mono' の両方がスマホに読み込まれたのを確認してから起動！
+  Promise.all([
+    document.fonts.load("700 12px 'Orbitron'"),
+    document.fonts.load("900 12px 'Orbitron'"),
+    document.fonts.load("100 12px 'Share Tech Mono'")
+  ]).then(() => {
+    startBooting();
+    initShutterGrid();
+  }).catch(() => {
+    startBooting();
+    initShutterGrid();
+  });
 };
 
 // ==========================================================================
@@ -84,20 +94,42 @@ function transitionToTitle() {
 function createTitleParticles() {
   const titleCtx = titleCanvas.getContext("2d");
   const text = "SHUN PORTFOLIO";
+  
+  // スマホとPCで最適な文字サイズと間隔を出し分ける計算式
+  const isMobile = window.innerWidth <= 768;
+  const fontSize = isMobile ? Math.min(window.innerWidth * 0.11, 42) : Math.min(window.innerWidth * 0.08, 65);
+  
   titleCtx.fillStyle = "#ffffff";
-  titleCtx.font = "900 " + Math.min(window.innerWidth * 0.08, 60) + "px 'Orbitron'";
+  titleCtx.font = "900 " + fontSize + "px 'Orbitron'";
   titleCtx.textAlign = "center";
   titleCtx.textBaseline = "middle";
   
   const x = titleCanvas.width / 2;
   const y = titleCanvas.height / 2;
-  titleCtx.fillText(text, x, y);
+  
+  // スマホの文字潰れ防止：スマホの時は一文字ずつ少し離してCanvasに描画する
+  if (isMobile) {
+    const letterSpacing = 6;
+    const characters = text.split("");
+    const totalWidth = titleCtx.measureText(text).width + (characters.length - 1) * letterSpacing;
+    let startX = x - totalWidth / 2 + titleCtx.measureText(characters[0]).width / 2;
+    
+    characters.forEach((char, index) => {
+      titleCtx.fillText(char, startX, y);
+      if (index < characters.length - 1) {
+        startX += (titleCtx.measureText(char).width / 2) + (titleCtx.measureText(characters[index + 1]).width / 2) + letterSpacing;
+      }
+    });
+  } else {
+    titleCtx.fillText(text, x, y);
+  }
 
   const imgData = titleCtx.getImageData(0, 0, titleCanvas.width, titleCanvas.height);
   const data = imgData.data;
   particles = [];
 
-  const step = 4;
+  // ドットの間引き間隔（スマホでは少し荒くして潰れを防ぐ）
+  const step = isMobile ? 5 : 4;
   for (let tY = 0; tY < titleCanvas.height; tY += step) {
     for (let tX = 0; tX < titleCanvas.width; tX += step) {
       const index = (tY * titleCanvas.width + tX) * 4;
@@ -111,7 +143,7 @@ function createTitleParticles() {
           vx: (Math.random() - 0.5) * 3,
           vy: (Math.random() - 0.5) * 3,
           color: "#ffffff",
-          size: Math.random() * 2 + 1,
+          size: isMobile ? (Math.random() * 1.5 + 1.2) : (Math.random() * 2 + 1),
           delay: Math.random() * 20 + 120
         });
       }
@@ -401,7 +433,6 @@ function pauseFallingShapes() {
 const stageItems = document.querySelectorAll(".stage-item");
 const selectCard = document.getElementById("select-card");
 
-// 詳細情報の要素（HTMLに追加予定のもの）
 const briefing = document.getElementById("briefing-screen");
 const briefingStageNum = document.getElementById("briefing-stage-num");
 const briefingTitle = document.getElementById("briefing-title");
@@ -409,101 +440,82 @@ const briefingPeriod = document.getElementById("briefing-period");
 const briefingDesc = document.getElementById("briefing-desc");
 const closeBriefingBtn = document.getElementById("briefing-close-btn");
 
-// 【ここ重要】飛ぶための出撃ボタン
 const launchBtn = document.getElementById("mission-launch-btn");
 
-// 【本番URL設定】実際の各作品ページURLを完璧にセットしました！
 const worksUrls = {
   "1": "https://syun03ig.github.io/mono-coffe/", 
   "2": "https://syun03ig.github.io/pure-care/",   
   "3": "https://syun03ig.github.io/hair-salon/"   
 };
 
-// 【詳細テキスト設定】ここをそれぞれの作品に合わせて熱く語ってください！
-// ふわっと出る画面に表示されるデータです。
 const worksBriefingData = {
   "1": {
     num: "STAGE 01",
     title: "MONO COFFEE",
-    period: "14 days", // 制作期間（仮）
+    period: "14 days",
     desc: "極限まで引き算された、無駄のない静寂なコーヒーショップのブランドサイト。余白とタイポグラフィ、コーヒーの湯気のアニメーションだけに焦点を当て、洗練された空間をWeb上にそのまま移植しました。"
   },
   "2": {
     num: "STAGE 02",
     title: "PURE CARE",
-    period: "20 days", // 制作期間（仮）
+    period: "20 days",
     desc: "クリーンでオーガニックなスキンケア商品のオンラインショップ。清潔感のあるアースカラー、なめらかに吸い付くようなホバーインタラクション、視覚的な透明感をコードの最適化と美しいCSSレイアウトで実現しました。"
   },
   "3": {
     num: "STAGE 03",
     title: "HAIR SALON",
-    period: "25 days", // 制作期間（仮）
+    period: "25 days",
     desc: "ストリートカルチャーの熱量をそのまま落とし込んだ、実機ライクなスマホ操作をベースにした最高傑作。全画面写真、トガった二重罫線、実機を忠実に模倣したメニューモーダルなど、私の技術をフル投入したボスステージです。"
   }
 };
 
-let currentTargetUrl = ""; // 現在選択中の作品URLを記憶しておく変数
+let currentTargetUrl = "";
 
-// ステージリスト（STAGE 01とか）をクリックした時
 stageItems.forEach(item => {
   item.addEventListener("click", () => {
     const stageId = item.getAttribute("data-stage");
     const data = worksBriefingData[stageId];
-    currentTargetUrl = worksUrls[stageId]; // 出撃先URLを記憶！
+    currentTargetUrl = worksUrls[stageId];
 
-    // 1. ロックオン点滅演出（これは残す）
     item.classList.add("locked-on");
-    
-    // 2. 背景図形の完全静止（これも残す）
     pauseFallingShapes();
 
-    // 【案2の変更点】いきなり飛ばずに、詳細（ブリーフィング）画面を表示
     setTimeout(() => {
-      if (!briefing) return; // エラー防止
-
-      // テキストを流し込む
+      if (!briefing) return;
       briefingStageNum.textContent = data.num;
       briefingTitle.textContent = data.title;
       briefingPeriod.textContent = data.period;
       briefingDesc.textContent = data.desc;
-
-      // ブリーフィング画面をふわっと出す（CSSで.active時に表示）
       briefing.classList.add("active");
-    }, 600); // ロックオン演出の後にふわっと
+    }, 600);
   });
 });
 
-// ブリーフィング画面の「閉じるボタン」（選択画面に戻る用）
 if (closeBriefingBtn) {
   closeBriefingBtn.addEventListener("click", () => {
     if (briefing) briefing.classList.remove("active");
-    // ロックオンを解除して図形を再開
     stageItems.forEach(item => item.classList.remove("locked-on"));
     startFallingShapes();
   });
 }
 
-// 【案2の変更点・最後の出撃ボタン】
-// 詳細画面にある MISSION START ボタンを押した時、別タブでサイトへ強制転送！
 if (launchBtn) {
   launchBtn.addEventListener("click", () => {
-    // 3. 親カードを巨大化させて「ロード」感を出す演出（演出をここに移動）
     if (selectCard) {
       selectCard.classList.add("zoom-out");
     }
 
-    // 4. ズームインが完全に完了した瞬間（1.8秒後）、出撃！
     setTimeout(() => {
       if (currentTargetUrl) {
-        window.open(currentTargetUrl, "_blank"); // 別タブで開く
+        // スマホのポップアップブロックを完全回避し、同じタブで移動する最適化処理
+        window.location.href = currentTargetUrl;
       }
       
-      // ユーザーがポートフォリオタブに戻ってきたときのために、画面の状態を元通りに修復しておく
       setTimeout(() => {
         if (selectCard) selectCard.classList.remove("zoom-out");
         if (briefing) briefing.classList.remove("active");
         stageItems.forEach(item => item.classList.remove("locked-on"));
-        startFallingShapes(); // 落ち物を再開しておく
+        startFallingShapes();
       }, 500);
 
     }, 1800);
