@@ -549,4 +549,39 @@ button {
     font-size: 1.1rem;
     width: 100%;
   }
+   /* ==========================================================================
+   スマホ・タブレットの「横向き（画面の高さが低いとき）」のスクロール救済設定
+   ========================================================================== */
+@media (max-width: 932px) and (orientation: landscape), (max-height: 500px) {
+  /* 1. 画面全体の固定を解除し、縦スクロールを有効化 */
+  html, body {
+    overflow-y: auto !important;
+    height: auto !important;
+    min-height: 100vh;
+  }
+
+  /* 2. 各画面のコンテナも、コンテンツの高さに合わせて伸びるように変更 */
+  .screen, 
+  #main-game-screen, 
+  #stage-select-screen, 
+  #title-call-screen {
+    height: auto !important;
+    min-height: 100vh;
+    overflow-y: visible !important;
+    padding-bottom: 40px; /* 下部に見切れ防止の余白 */
+  }
+
+  /* 3. メインメニュー（ステータス画面）のグリッドも縦並びにしてスクロールさせる */
+  .hud-container {
+    grid-template-columns: 1fr !important;
+    height: auto !important;
+  }
+
+  /* 4. ブリーフィング画面（作品詳細モーダル）が画面に埋もれないように調整 */
+  .briefing-container {
+    max-height: 85vh !important;
+    overflow-y: auto !important;
+    margin: 20px auto;
+  }
+}
 } 
