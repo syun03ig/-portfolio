@@ -7,7 +7,7 @@
   padding: 0;
   user-select: none;
 }
-.menu-item
+
 body, html {
   width: 100%;
   height: 100%;
@@ -144,7 +144,7 @@ button {
 .hud-menu-box {
   border-right: 2px solid #333;
   padding: 50px;
-   padding-top: 90px;
+  padding-top: 90px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -463,8 +463,9 @@ button {
 .btn-cursor {
   margin-left: 10px;
 }
+
 /* ==========================================================================
-   7. RESPONSIVE MEDIA QUERIES (スマホ・タブレット用の画面最適化)
+   7. RESPONSIVE MEDIA QUERIES (スマホ・タブレット用の画面最適化 - 縦画面用)
    ========================================================================== */
 @media (max-width: 768px) {
   /* --- 1. 起動画面の調整 --- */
@@ -486,7 +487,7 @@ button {
     padding: 30px 20px;
   }
   
- .menu-item {
+  .menu-item {
     font-size: 1.4rem;
     position: relative; /* 基準点を設定 */
     justify-content: center;
@@ -549,8 +550,10 @@ button {
     font-size: 1.1rem;
     width: 100%;
   }
-   /* ==========================================================================
-   スマホ・タブレットの「横向き（画面の高さが低いとき）」のスクロール救済設定
+} /* ←ここでスマホ縦画面用設定をきれいに閉じました！ */
+
+/* ==========================================================================
+   8. RESPONSIVE MEDIA QUERIES (スマホ・タブレット用の画面最適化 - 横画面スクロール救済用)
    ========================================================================== */
 @media (max-width: 932px) and (orientation: landscape), (max-height: 500px) {
   /* 1. 画面全体の固定を解除し、縦スクロールを有効化 */
@@ -584,4 +587,3 @@ button {
     margin: 20px auto;
   }
 }
-} 
