@@ -97,7 +97,8 @@ function createTitleParticles() {
   
   // スマホとPCで最適な文字サイズと間隔を出し分ける計算式
   const isMobile = window.innerWidth <= 768;
-  const fontSize = isMobile ? Math.min(window.innerWidth * 0.11, 42) : Math.min(window.innerWidth * 0.08, 65);
+  // スマホの文字サイズを最大42pxから「最大32px」へ一回りコンパクトにし、はみ出しを防ぎます！
+  const fontSize = isMobile ? Math.min(window.innerWidth * 0.085, 32) : Math.min(window.innerWidth * 0.08, 65);
   
   titleCtx.fillStyle = "#ffffff";
   titleCtx.font = "900 " + fontSize + "px 'Orbitron'";
@@ -109,7 +110,8 @@ function createTitleParticles() {
   
   // スマホの文字潰れ防止：スマホの時は一文字ずつ少し離してCanvasに描画する
   if (isMobile) {
-    const letterSpacing = 6;
+    // 文字同士の間隔（余白）を 6 から「4.5」に少しだけ引き算して全体幅を圧縮！
+    const letterSpacing = 4.5;
     const characters = text.split("");
     const totalWidth = titleCtx.measureText(text).width + (characters.length - 1) * letterSpacing;
     let startX = x - totalWidth / 2 + titleCtx.measureText(characters[0]).width / 2;
@@ -121,6 +123,7 @@ function createTitleParticles() {
       }
     });
   } else {
+    // PCの場合は普通に一発で真ん中に描画
     titleCtx.fillText(text, x, y);
   }
 
@@ -453,7 +456,7 @@ const worksBriefingData = {
     num: "STAGE 01",
     title: "MONO COFFEE",
     period: "14 days",
-    desc: "極限まで引き算された、無駄のない静寂なコーヒーショップのブランドサイト。余白とタイポグラフィ、コーヒーの湯気のアニメーションだけに焦点を当て、洗練された空間をWeb上にそのまま移植しました。"
+    desc: "極限まで引き算された、無駄のない静寂なコーヒーショップ의 ブランドサイト。余白とタイポグラフィ、コーヒーの湯気のアニメーションだけに焦点を当て、洗練された空間をWeb上にそのまま移植しました。"
   },
   "2": {
     num: "STAGE 02",
