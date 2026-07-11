@@ -462,3 +462,77 @@ button {
 .btn-cursor {
   margin-left: 10px;
 }
+/* ==========================================================================
+   7. RESPONSIVE MEDIA QUERIES (スマホ・タブレット用の画面最適化)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* --- 1. 起動画面の調整 --- */
+  .boot-screen {
+    padding: 20px;
+  }
+  .boot-line {
+    font-size: 0.9rem; /* スマホ用に文字を少し小さく */
+  }
+
+  /* --- 2. メインメニュー（ステータス画面）の調整 --- */
+  .hud-container {
+    grid-template-columns: 1fr; /* 左右並びから縦並びに変更 */
+  }
+  
+  .hud-menu-box {
+    border-right: none;
+    border-bottom: 2px solid #333; /* 区切り線を横線に変更 */
+    padding: 30px 20px;
+  }
+  
+  .menu-item {
+    font-size: 1.4rem; /* ボタンの文字サイズ調整 */
+    justify-content: center;
+  }
+  
+  .hud-status-box {
+    padding: 30px 20px;
+  }
+
+  /* --- 3. ステージ選択画面の調整 --- */
+  .select-container {
+    padding: 20px;
+    width: 95%; /* 画面端にギチギチにならないよう余白を作る */
+  }
+  
+  .select-title {
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+  }
+  
+  .stage-item {
+    padding: 14px 16px;
+    font-size: 1rem; /* スマホで1行に収まるように小さく */
+  }
+
+  /* --- 4. ブリーフィング画面（作品詳細）の調整 --- */
+  .briefing-container {
+    padding: 25px 20px;
+    width: 95%;
+    max-height: 90vh; /* 画面からはみ出さないように縦幅を制限 */
+    overflow-y: auto;  /* 万が一縦に長くなってもスクロールできるようにする */
+  }
+  
+  .briefing-title {
+    font-size: 1.6rem; /* タイトルをスマホサイズに */
+  }
+  
+  .data-line {
+    font-size: 0.95rem;
+  }
+  
+  .briefing-desc {
+    font-size: 0.9rem;
+  }
+
+  #mission-launch-btn {
+    padding: 14px 28px;
+    font-size: 1.1rem; /* 出撃ボタンが画面からはみ出さないサイズに */
+    width: 100%;       /* スマホでは押しやすいように横幅いっぱいに */
+  }
+}
