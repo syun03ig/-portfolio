@@ -147,7 +147,7 @@ button {
    padding-top: 90px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 @media (max-width: 768px) {
