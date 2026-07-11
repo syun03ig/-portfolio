@@ -536,3 +536,16 @@ button {
     width: 100%;       /* スマホでは押しやすいように横幅いっぱいに */
   }
 }
+/* --- 2. メインメニュー（ステータス画面）の調整 --- */
+  .hud-container {
+    grid-template-columns: 1fr;
+  }
+  
+  /* スマホのタイトル文字潰れ・見づらさ対策 */
+  .select-title {
+    font-family: 'Orbitron', sans-serif; /* タイトルをクッキリした Orbitron に */
+    font-weight: 900;
+    font-size: 1.2rem;
+    letter-spacing: 8px; /* 文字の間隔を広くして視認性アップ */
+    color: #fff;
+  }
