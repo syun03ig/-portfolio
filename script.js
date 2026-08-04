@@ -1,5 +1,5 @@
 // ==========================================================================
-// 1. BOOT LOGIC (システム起動カタカタアニメーション)
+// 1. システム起動カタカタアニメーション
 // ==========================================================================
 const logData = [
   "> LOADING SHUN SYSTEM v2026...",
@@ -26,7 +26,7 @@ function startBooting() {
       p.textContent = logData[currentLine];
       
       logContainer.appendChild(p);
-      p.offsetHeight; // アニメーション発火用リフラックス
+      p.offsetHeight; 
       p.classList.add("show");
       
       if (currentLine === logData.length - 1) {
@@ -51,7 +51,6 @@ function startBooting() {
 }
 
 window.onload = function() {
-  // 'Orbitron' と 'Share Tech Mono' の両方がスマホに読み込まれたのを確認してから起動！
   Promise.all([
     document.fonts.load("700 12px 'Orbitron'"),
     document.fonts.load("900 12px 'Orbitron'"),
@@ -66,7 +65,7 @@ window.onload = function() {
 };
 
 // ==========================================================================
-// 2. TITLE EXPLOSION LOGIC (タイトルドットモザイク爆発Canvas)
+// 2. タイトルドットモザイク爆発Canvas
 // ==========================================================================
 const titleScreen = document.getElementById("title-call-screen");
 const titleCanvas = document.getElementById("title-canvas");
@@ -95,9 +94,7 @@ function createTitleParticles() {
   const titleCtx = titleCanvas.getContext("2d");
   const text = "SHUN PORTFOLIO";
   
-  // スマホとPCで最適な文字サイズと間隔を出し分ける計算式
   const isMobile = window.innerWidth <= 768;
-  // スマホの文字サイズを最大42pxから「最大32px」へ一回りコンパクトにし、はみ出しを防ぎます！
   const fontSize = isMobile ? Math.min(window.innerWidth * 0.085, 32) : Math.min(window.innerWidth * 0.08, 65);
   
   titleCtx.fillStyle = "#ffffff";
@@ -108,9 +105,7 @@ function createTitleParticles() {
   const x = titleCanvas.width / 2;
   const y = titleCanvas.height / 2;
   
-  // スマホの文字潰れ防止：スマホの時は一文字ずつ少し離してCanvasに描画する
   if (isMobile) {
-    // 文字同士の間隔（余白）を 6 から「4.5」に少しだけ引き算して全体幅を圧縮！
     const letterSpacing = 4.5;
     const characters = text.split("");
     const totalWidth = titleCtx.measureText(text).width + (characters.length - 1) * letterSpacing;
@@ -123,7 +118,6 @@ function createTitleParticles() {
       }
     });
   } else {
-    // PCの場合は普通に一発で真ん中に描画
     titleCtx.fillText(text, x, y);
   }
 
@@ -131,7 +125,6 @@ function createTitleParticles() {
   const data = imgData.data;
   particles = [];
 
-  // ドットの間引き間隔（スマホでは少し荒くして潰れを防ぐ）
   const step = isMobile ? 5 : 4;
   for (let tY = 0; tY < titleCanvas.height; tY += step) {
     for (let tX = 0; tX < titleCanvas.width; tX += step) {
@@ -222,7 +215,7 @@ if (startGameBtn) {
 }
 
 // ==========================================================================
-// 4. SHUTTER WIPE (ドットシャッター切り替え)
+// 4. ドットシャッター切り替え
 // ==========================================================================
 const shutter = document.getElementById("shutter");
 const rows = 10;
@@ -274,7 +267,7 @@ function triggerShutterWipe(middleCallback) {
 }
 
 // ==========================================================================
-// 5. STAGE SELECT BACKGROUND EFFECTS (こだわりの落ち物物理図形システム)
+// 5. STAGE SELECT BACKGROUND EFFECTS
 // ==========================================================================
 const shapesCanvas = document.getElementById("falling-shapes-canvas");
 let shapeList = [];
@@ -431,7 +424,7 @@ function pauseFallingShapes() {
 }
 
 // ==========================================================================
-// 6. STAGEブリーフィング（案2 作品詳細）と出撃URLジャンプ
+// 6. STAGEブリーフィングと出撃URLジャンプ
 // ==========================================================================
 const stageItems = document.querySelectorAll(".stage-item");
 const selectCard = document.getElementById("select-card");
@@ -444,11 +437,18 @@ const briefingDesc = document.getElementById("briefing-desc");
 const closeBriefingBtn = document.getElementById("briefing-close-btn");
 
 const launchBtn = document.getElementById("mission-launch-btn");
+const githubBtn = document.getElementById("github-code-btn");
 
 const worksUrls = {
   "1": "https://syun03ig.github.io/mono-coffe/", 
   "2": "https://syun03ig.github.io/pure-care/",   
   "3": "https://syun03ig.github.io/hair-salon/"   
+};
+
+const worksGithubUrls = {
+  "1": "https://github.com/syun03ig/mono-coffe", 
+  "2": "https://github.com/syun03ig/pure-care",   
+  "3": "https://github.com/syun03ig/hair-salon"   
 };
 
 const worksBriefingData = {
@@ -480,6 +480,11 @@ stageItems.forEach(item => {
     const data = worksBriefingData[stageId];
     currentTargetUrl = worksUrls[stageId];
 
+    // ステージ選択時にGitHubボタンのhref（リンク先）を書き換える
+    if (githubBtn) {
+      githubBtn.href = worksGithubUrls[stageId];
+    }
+
     item.classList.add("locked-on");
     pauseFallingShapes();
 
@@ -510,7 +515,6 @@ if (launchBtn) {
 
     setTimeout(() => {
       if (currentTargetUrl) {
-        // スマホのポップアップブロックを完全回避し、同じタブで移動する最適化処理
         window.location.href = currentTargetUrl;
       }
       
