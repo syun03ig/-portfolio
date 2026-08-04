@@ -480,7 +480,7 @@ stageItems.forEach(item => {
     const data = worksBriefingData[stageId];
     currentTargetUrl = worksUrls[stageId];
 
-    // ステージ選択時にGitHubボタンのhref（リンク先）を書き換える
+ 
     if (githubBtn) {
       githubBtn.href = worksGithubUrls[stageId];
     }
