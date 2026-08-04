@@ -334,19 +334,19 @@ button {
 }
 
 /* ==========================================================================
-   6. BRIEFING SCREEN (案2 詳細画面)
+   6. BRIEFING SCREEN (詳細画面)
    ========================================================================== */
 .briefing-screen {
-  position: fixed; /* absolute から fixed にして最前面をキープ */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.92); /* 高級感のある黒透過背景 */
+  background-color: rgba(0, 0, 0, 0.92);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 92; /* カンバスより上でシャッターより少し下 */
+  z-index: 92;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;
@@ -354,7 +354,6 @@ button {
   transform: scale(0.95);
 }
 
-/* 詳細が開いたときのクラス（ふわっと出現） */
 .briefing-screen.active {
   opacity: 1;
   pointer-events: auto;
@@ -364,7 +363,7 @@ button {
 .briefing-container {
   width: 100%;
   max-width: 700px;
-  border: 1px solid #00ff66; /* トガらせるためにサイバーグリーン枠に */
+  border: 1px solid #00ff66;
   background-color: #050505;
   padding: 40px;
   box-shadow: 0 0 30px rgba(0, 255, 102, 0.15);
@@ -391,7 +390,6 @@ button {
   border-color: #ff3366;
 }
 
-/* 詳細タイトルエリア */
 .briefing-badge {
   display: inline-block;
   border: 1px solid #00ff66;
@@ -408,7 +406,6 @@ button {
   color: #fff;
 }
 
-/* データ欄 */
 .briefing-data-box, .briefing-desc-box {
   margin-bottom: 25px;
   border-top: 1px solid #222;
@@ -428,47 +425,17 @@ button {
   color: #fff;
 }
 
-/* 日本語テキストエリア */
 .briefing-desc {
   color: #ccc;
   font-size: 1rem;
   line-height: 1.8;
-  font-family: sans-serif; /* 日本語を読みやすくするためにここだけゴシック体 */
-}
-
-/* 出撃ボタンエリア */
-.launch-btn-box {
-  margin-top: 20px;
-  text-align: center;
-}
-
-#mission-launch-btn {
-  display: inline-block;
-  border: 1px solid #00ff66;
-  background-color: #000;
-  color: #00ff66;
-  padding: 18px 36px;
-  font-size: 1.3rem;
-  letter-spacing: 4px;
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-#mission-launch-btn:hover {
-  background-color: #00ff66;
-  color: #000;
-  box-shadow: 0 0 20px rgba(0, 255, 102, 0.4);
-}
-
-.btn-cursor {
-  margin-left: 10px;
+  font-family: sans-serif;
 }
 
 /* ==========================================================================
    7. RESPONSIVE MEDIA QUERIES (スマホ・タブレット用の画面最適化 - 縦画面用)
    ========================================================================== */
 @media (max-width: 768px) {
-  /* --- 1. 起動画面の調整 --- */
   .boot-screen {
     padding: 20px;
   }
@@ -476,9 +443,8 @@ button {
     font-size: 0.9rem;
   }
 
-  /* --- 2. メインメニュー（ステータス画面）の調整 --- */
   .hud-container {
-    grid-template-columns: 1fr; /* スマホでは縦並び */
+    grid-template-columns: 1fr;
   }
   
   .hud-menu-box {
@@ -489,33 +455,30 @@ button {
   
   .menu-item {
     font-size: 1.4rem;
-    position: relative; /* 基準点を設定 */
+    position: relative;
     justify-content: center;
   }
   
-  /* スマホの時だけ、矢印（▶）を絶対配置にしてテキストの配置に干渉させない！ */
   .menu-item .cursor {
     position: absolute;
-    left: calc(50% - 7rem); /* テキストの長さに合わせて自動で左側に添える計算式 */
-    margin-right: 0;        /* ズレの原因だった右マージンをリセット */
+    left: calc(50% - 7rem);
+    margin-right: 0;
   }
   
   .hud-status-box {
     padding: 30px 20px;
   }
 
-  /* --- 3. ステージ選択画面の調整 --- */
   .select-container {
     padding: 20px;
     width: 95%;
   }
   
-  /* スマホのタイトル文字潰れ・見づらさ対策（ここに格納！） */
   .select-title {
     font-family: 'Orbitron', sans-serif;
     font-weight: 900;
     font-size: 1.2rem;
-    letter-spacing: 8px; /* 文字間隔を広げてスマホでもクッキリ */
+    letter-spacing: 8px;
     color: #fff;
     margin-bottom: 25px;
   }
@@ -525,7 +488,6 @@ button {
     font-size: 1rem;
   }
 
-  /* --- 4. ブリーフィング画面（作品詳細）の調整 --- */
   .briefing-container {
     padding: 25px 20px;
     width: 95%;
@@ -550,20 +512,18 @@ button {
     font-size: 1.1rem;
     width: 100%;
   }
-} /* ←ここでスマホ縦画面用設定をきれいに閉じました！ */
+}
 
 /* ==========================================================================
    8. RESPONSIVE MEDIA QUERIES (スマホ・タブレット用の画面最適化 - 横画面スクロール救済用)
    ========================================================================== */
 @media (max-width: 932px) and (orientation: landscape), (max-height: 500px) {
-  /* 1. 画面全体の固定を解除し、縦スクロールを有効化 */
   html, body {
     overflow-y: auto !important;
     height: auto !important;
     min-height: 100vh;
   }
 
-  /* 2. 各画面のコンテナも、コンテンツの高さに合わせて伸びるように変更 */
   .screen, 
   #main-game-screen, 
   #stage-select-screen, 
@@ -571,19 +531,82 @@ button {
     height: auto !important;
     min-height: 100vh;
     overflow-y: visible !important;
-    padding-bottom: 40px; /* 下部に見切れ防止の余白 */
+    padding-bottom: 40px;
   }
 
-  /* 3. メインメニュー（ステータス画面）のグリッドも縦並びにしてスクロールさせる */
   .hud-container {
     grid-template-columns: 1fr !important;
     height: auto !important;
   }
 
-  /* 4. ブリーフィング画面（作品詳細モーダル）が画面に埋もれないように調整 */
   .briefing-container {
     max-height: 85vh !important;
     overflow-y: auto !important;
     margin: 20px auto;
+  }
+}
+
+/* ==========================================================================
+   9. GITHUB CODE BUTTON STYLES (追加ボタンの見た目調整)
+   ========================================================================== */
+.launch-btn-box {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+#mission-launch-btn {
+  display: inline-block;
+  border: 1px solid #00ff66;
+  background-color: #000;
+  color: #00ff66;
+  padding: 18px 36px;
+  font-size: 1.3rem;
+  letter-spacing: 4px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+#mission-launch-btn:hover {
+  background-color: #00ff66;
+  color: #000;
+  box-shadow: 0 0 20px rgba(0, 255, 102, 0.4);
+}
+
+#github-code-btn {
+  display: inline-block;
+  border: 1px solid #33ccff;
+  background-color: #000;
+  color: #33ccff;
+  padding: 18px 28px;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+#github-code-btn:hover {
+  background-color: #33ccff;
+  color: #000;
+  box-shadow: 0 0 20px rgba(51, 204, 255, 0.4);
+}
+
+.btn-cursor {
+  margin-left: 10px;
+}
+
+@media (max-width: 768px) {
+  .launch-btn-box {
+    flex-direction: column;
+  }
+  #github-code-btn {
+    width: 100%;
+    padding: 14px 28px;
+    font-size: 1rem;
+    text-align: center;
   }
 }
