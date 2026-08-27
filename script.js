@@ -7,6 +7,7 @@ const logData = [
   "> LOADING WORKS: MONO-COFFEE... [SUCCESS]",
   "> LOADING WORKS: PURE-CARE...   [SUCCESS]",
   "> LOADING WORKS: HAIR-SALON...  [SUCCESS]",
+  "> LOADING WORKS: CINEMA-ARCHIVE... [SUCCESS]",
   "> SYSTEM OK."
 ];
 
@@ -442,13 +443,15 @@ const githubBtn = document.getElementById("github-code-btn");
 const worksUrls = {
   "1": "https://syun03ig.github.io/mono-coffe/", 
   "2": "https://syun03ig.github.io/pure-care/",   
-  "3": "https://syun03ig.github.io/hair-salon/"   
+  "3": "https://syun03ig.github.io/hair-salon/",
+  "4": "https://syun03ig.github.io/movie-app/"
 };
 
 const worksGithubUrls = {
   "1": "https://github.com/syun03ig/mono-coffe", 
   "2": "https://github.com/syun03ig/pure-care",   
-  "3": "https://github.com/syun03ig/hair-salon"   
+  "3": "https://github.com/syun03ig/hair-salon",
+  "4": "https://github.com/syun03ig/movie-app"
 };
 
 const worksBriefingData = {
@@ -469,6 +472,12 @@ const worksBriefingData = {
     title: "HAIR SALON",
     period: "25 days",
     desc: "ストリートカルチャーの熱量をそのまま落とし込んだ、実機ライクなスマホ操作をベースにした最高傑作。全画面写真、トガった二重罫線、実機を忠実に模倣したメニューモーダルなど、私の技術をフル投入したボスステージです。"
+  },
+  "4": {
+    num: "STAGE 04",
+    title: "CINEMA ARCHIVE",
+    period: "3 days",
+    desc: "TMDb APIと連携したリアルタイム映画・アニメ検索Webアプリ。Netflix風のシネマティックな暗黒UIに、async/awaitを用いた非同期データ通信、動的なJP/EN多言語切り替え、localStorageを活用したブラウザ保持型のお気に入り保存機能を実装しました。"
   }
 };
 
@@ -480,7 +489,6 @@ stageItems.forEach(item => {
     const data = worksBriefingData[stageId];
     currentTargetUrl = worksUrls[stageId];
 
- 
     if (githubBtn) {
       githubBtn.href = worksGithubUrls[stageId];
     }
