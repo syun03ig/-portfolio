@@ -8,6 +8,7 @@ const logData = [
   "> LOADING WORKS: PURE-CARE...   [SUCCESS]",
   "> LOADING WORKS: HAIR-SALON...  [SUCCESS]",
   "> LOADING WORKS: CINEMA-ARCHIVE... [SUCCESS]",
+  "> LOADING WORKS: ESSENCE-ARCHIVE... [SUCCESS]",
   "> SYSTEM OK."
 ];
 
@@ -444,14 +445,16 @@ const worksUrls = {
   "1": "https://syun03ig.github.io/mono-coffe/", 
   "2": "https://syun03ig.github.io/pure-care/",   
   "3": "https://syun03ig.github.io/hair-salon/",
-  "4": "https://syun03ig.github.io/movie-app/"
+  "4": "https://syun03ig.github.io/movie-app/",
+  "5": "https://syun03ig.github.io/essence-archive/"
 };
 
 const worksGithubUrls = {
   "1": "https://github.com/syun03ig/mono-coffe", 
   "2": "https://github.com/syun03ig/pure-care",   
   "3": "https://github.com/syun03ig/hair-salon",
-  "4": "https://github.com/syun03ig/movie-app"
+  "4": "https://github.com/syun03ig/movie-app",
+  "5": "https://github.com/syun03ig/essence-archive"
 };
 
 const worksBriefingData = {
@@ -478,6 +481,12 @@ const worksBriefingData = {
     title: "CINEMA ARCHIVE",
     period: "3 days",
     desc: "TMDb APIと連携したリアルタイム映画・アニメ検索Webアプリ。Netflix風のシネマティックな暗黒UIに、async/awaitを用いた非同期データ通信、動的なJP/EN多言語切り替え、localStorageを活用したブラウザ保持型のお気に入り保存機能を実装しました。"
+  },
+  "5": {
+    num: "STAGE 05",
+    title: "ESSENCE ARCHIVE",
+    period: "3 days",
+    desc: "静寂と光が交差するミニマルな建築・プロダクトギャラリー。外部ライブラリに頼らず、純粋なJavaScriptで物理計算に基づくカスタムマウスカーソル追従や3Dチルト効果を実装。さらにLocalStorageを活用し、複数ページ（favorites.html）間でのリアルタイムなお気に入り状態同期と管理システムを構築しました。"
   }
 };
 
