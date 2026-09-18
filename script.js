@@ -1,7 +1,8 @@
 // ==========================================================================
-// 0. タイマー一括管理（スキップ時の裏関数呼び出し防止）
+// 0. タイマー＆スキップ状態一括管理（スキップ時の裏関数呼び出し防止）
 // ==========================================================================
 let activeTimeouts = [];
+let isSkipped = false; // 変数宣言を最上部に配置
 
 function setTrackedTimeout(callback, delay) {
   const timerId = setTimeout(() => {
@@ -575,7 +576,6 @@ if (launchBtn) {
 // 7. アニメーション一括スキップ機能
 // ==========================================================================
 const skipBtn = document.getElementById("skip-boot-btn");
-let isSkipped = false;
 
 function skipToStageSelect() {
   if (isSkipped) return;
