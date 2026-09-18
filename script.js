@@ -1,4 +1,18 @@
 // ==========================================================================
+// 0. タイマー一括管理（スキップ時の裏関数呼び出し防止）
+// ==========================================================================
+let activeTimeouts = [];
+
+function setTrackedTimeout(callback, delay) {
+  const timerId = setTimeout(() => {
+    callback();
+    activeTimeouts = activeTimeouts.filter(id => id !== timerId);
+  }, delay);
+  activeTimeouts.push(timerId);
+  return timerId;
+}
+
+// ==========================================================================
 // 1. システム起動カタカタアニメーション
 // ==========================================================================
 const logData = [
@@ -32,12 +46,12 @@ function startBooting() {
       p.classList.add("show");
       
       if (currentLine === logData.length - 1) {
-        setTimeout(() => {
+        setTrackedTimeout(() => {
           transitionToTitle();
         }, 1200);
       } else {
         currentLine++;
-        setTimeout(printLine, 400);
+        setTrackedTimeout(printLine, 400);
       }
     }
   }
@@ -46,7 +60,7 @@ function startBooting() {
   initialCursor.className = "cursor-blink";
   logContainer.appendChild(initialCursor);
 
-  setTimeout(() => {
+  setTrackedTimeout(() => {
     initialCursor.remove();
     printLine();
   }, 1000);
@@ -76,6 +90,9 @@ let particles = [];
 let titleAnimationId;
 
 function transitionToTitle() {
+  // すでにスキップされている場合は処理を完全に拒否
+  if (isSkipped) return;
+
   const bootLoader = document.getElementById("boot-loader");
   if (bootLoader) bootLoader.style.display = "none";
   if (!titleScreen || !titleCanvas) {
@@ -152,6 +169,8 @@ function createTitleParticles() {
 
 let frameCount = 0;
 function animateTitleExplosion() {
+  if (isSkipped) return; // スキップ済みならアニメーション描画もしない
+
   const titleCtx = titleCanvas.getContext("2d");
   titleCtx.clearRect(0, 0, titleCanvas.width, titleCanvas.height);
   frameCount++;
@@ -197,6 +216,7 @@ const startGameBtn = document.getElementById("start-game-btn");
 const startMenuItem = document.getElementById("start-menu-item");
 
 function transitionToMainScreen() {
+  if (isSkipped) return; // スキップ済みなら処理をキャンセル
   if (titleScreen) titleScreen.classList.remove("active");
   if (mainScreen) mainScreen.classList.add("active");
 }
@@ -205,7 +225,7 @@ if (startGameBtn) {
   startGameBtn.addEventListener("click", () => {
     if (startMenuItem) startMenuItem.classList.add("pi-keen");
 
-    setTimeout(() => {
+    setTrackedTimeout(() => {
       triggerShutterWipe(() => {
         if (mainScreen) mainScreen.classList.remove("active");
         const stageSelect = document.getElementById("stage-select-screen");
@@ -251,17 +271,17 @@ function triggerShutterWipe(middleCallback) {
   }
 
   delayMatrix.forEach(item => {
-    setTimeout(() => {
+    setTrackedTimeout(() => {
       item.el.classList.add("filled");
     }, item.delay);
   });
 
   const maxDelay = (rows + cols) * 35;
-  setTimeout(() => {
+  setTrackedTimeout(() => {
     if (middleCallback) middleCallback();
 
     delayMatrix.forEach(item => {
-      setTimeout(() => {
+      setTrackedTimeout(() => {
         item.el.classList.remove("filled");
       }, maxDelay + 200 + (item.delay));
     });
@@ -506,7 +526,7 @@ stageItems.forEach(item => {
     item.classList.add("locked-on");
     pauseFallingShapes();
 
-    setTimeout(() => {
+    setTrackedTimeout(() => {
       if (!briefing) return;
       briefingStageNum.textContent = data.num;
       briefingTitle.textContent = data.title;
@@ -527,24 +547,24 @@ if (closeBriefingBtn) {
 
 if (launchBtn) {
   launchBtn.addEventListener("click", () => {
-    if (isLaunching) return; // 連続クリック時は処理をスキップ
+    if (isLaunching) return;
     isLaunching = true;
 
     if (selectCard) {
       selectCard.classList.add("zoom-out");
     }
 
-    setTimeout(() => {
+    setTrackedTimeout(() => {
       if (currentTargetUrl) {
         window.location.href = currentTargetUrl;
       }
       
-      setTimeout(() => {
+      setTrackedTimeout(() => {
         if (selectCard) selectCard.classList.remove("zoom-out");
         if (briefing) briefing.classList.remove("active");
         stageItems.forEach(item => item.classList.remove("locked-on"));
         startFallingShapes();
-        isLaunching = false; // フラグのリセット
+        isLaunching = false;
       }, 500);
 
     }, 1800);
@@ -561,12 +581,14 @@ function skipToStageSelect() {
   if (isSkipped) return;
   isSkipped = true;
 
-  // 1. 進行中のタイトルCanvasアニメーションを強制停止
+  // 1. 進行中のタイマーをすべて強制破棄
+  activeTimeouts.forEach(timerId => clearTimeout(timerId));
+  activeTimeouts = [];
+
+  // 2. タイトルCanvasアニメーションを完全に停止＆消去
   if (titleAnimationId) {
     cancelAnimationFrame(titleAnimationId);
   }
-
-  // 2. Canvasの描画を完全にクリア
   if (titleCanvas) {
     const titleCtx = titleCanvas.getContext("2d");
     if (titleCtx) {
@@ -574,7 +596,7 @@ function skipToStageSelect() {
     }
   }
 
-  // 3. 全てのアニメーション画面を非表示にしてステージ選択画面へ直行
+  // 3. 全ての演出画面を非表示にしてステージ選択画面を表示
   const bootLoader = document.getElementById("boot-loader");
   const titleScreen = document.getElementById("title-call-screen");
   const mainScreen = document.getElementById("main-game-screen");
