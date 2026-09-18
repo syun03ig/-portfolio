@@ -491,6 +491,7 @@ const worksBriefingData = {
 };
 
 let currentTargetUrl = "";
+let isLaunching = false; // ダブルクリック防止フラグ
 
 stageItems.forEach(item => {
   item.addEventListener("click", () => {
@@ -526,6 +527,9 @@ if (closeBriefingBtn) {
 
 if (launchBtn) {
   launchBtn.addEventListener("click", () => {
+    if (isLaunching) return; // 連続クリック時は処理をスキップ
+    isLaunching = true;
+
     if (selectCard) {
       selectCard.classList.add("zoom-out");
     }
@@ -540,6 +544,7 @@ if (launchBtn) {
         if (briefing) briefing.classList.remove("active");
         stageItems.forEach(item => item.classList.remove("locked-on"));
         startFallingShapes();
+        isLaunching = false; // フラグのリセット
       }, 500);
 
     }, 1800);
