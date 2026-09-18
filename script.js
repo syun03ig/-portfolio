@@ -561,7 +561,20 @@ function skipToStageSelect() {
   if (isSkipped) return;
   isSkipped = true;
 
-  // 全てのアニメーション画面を非表示にしてステージ選択画面へ直行
+  // 1. 進行中のタイトルCanvasアニメーションを強制停止
+  if (titleAnimationId) {
+    cancelAnimationFrame(titleAnimationId);
+  }
+
+  // 2. Canvasの描画を完全にクリア
+  if (titleCanvas) {
+    const titleCtx = titleCanvas.getContext("2d");
+    if (titleCtx) {
+      titleCtx.clearRect(0, 0, titleCanvas.width, titleCanvas.height);
+    }
+  }
+
+  // 3. 全てのアニメーション画面を非表示にしてステージ選択画面へ直行
   const bootLoader = document.getElementById("boot-loader");
   const titleScreen = document.getElementById("title-call-screen");
   const mainScreen = document.getElementById("main-game-screen");
