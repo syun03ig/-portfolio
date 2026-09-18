@@ -550,3 +550,41 @@ if (launchBtn) {
     }, 1800);
   });
 }
+
+// ==========================================================================
+// 7. アニメーション一括スキップ機能
+// ==========================================================================
+const skipBtn = document.getElementById("skip-boot-btn");
+let isSkipped = false;
+
+function skipToStageSelect() {
+  if (isSkipped) return;
+  isSkipped = true;
+
+  // 全てのアニメーション画面を非表示にしてステージ選択画面へ直行
+  const bootLoader = document.getElementById("boot-loader");
+  const titleScreen = document.getElementById("title-call-screen");
+  const mainScreen = document.getElementById("main-game-screen");
+  const stageSelect = document.getElementById("stage-select-screen");
+
+  if (bootLoader) bootLoader.style.display = "none";
+  if (titleScreen) titleScreen.classList.remove("active");
+  if (mainScreen) mainScreen.classList.remove("active");
+  
+  if (stageSelect) {
+    stageSelect.classList.add("active");
+    startFallingShapes();
+  }
+}
+
+// ボタンクリックでスキップ
+if (skipBtn) {
+  skipBtn.addEventListener("click", skipToStageSelect);
+}
+
+// ESCキー入力でスキップ
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    skipToStageSelect();
+  }
+});
